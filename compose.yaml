@@ -1,0 +1,19 @@
+services:
+  app:
+    image: php:8.5-cli
+    working_dir: /app
+    volumes:
+      - .:/app
+      - vendor:/app/vendor
+    ports:
+      - "127.0.0.1:8000:8000"
+    command: php artisan serve --host=0.0.0.0 --port=8000
+  composer:
+    image: composer:2
+    working_dir: /app
+    volumes:
+      - .:/app
+      - vendor:/app/vendor
+    profiles: [tools]
+volumes:
+  vendor:

@@ -1,32 +1,41 @@
-# TP Framework PHP : Atelier Solidaire
+# Atelier Solidaire : Laravel, séance 01
 
-Dr Paul Mbilong, L3 Développement, ISMAGI.
-Le cours est centré sur Laravel dès la séance 1, puis Symfony à partir de la séance 5.
-PHP est expliqué à travers les usages des frameworks.
+Dr Paul Mbilong, L3 Développement, ISMAGI. Compléter les TODO ; les tests doivent détecter les comportements manquants.
 
-| Séance | Problème Laravel | Base | Correction |
-|:--|:--|:--|:--|
-| 01 | Route, contrôleur, Blade et liste ouverte | [seance-01](https://github.com/M2P-git/tp-framework-php/tree/seance-01) | [corrige-01](https://github.com/M2P-git/tp-framework-php/tree/corrige-01) |
-| 02 | Recherche, service et requête non fiable | [seance-02](https://github.com/M2P-git/tp-framework-php/tree/seance-02) | [corrige-02](https://github.com/M2P-git/tp-framework-php/tree/corrige-02) |
-| 03 | Eloquent et historique sans doublon | [seance-03](https://github.com/M2P-git/tp-framework-php/tree/seance-03) | [corrige-03](https://github.com/M2P-git/tp-framework-php/tree/corrige-03) |
-| 04 | FormRequest, policy et preuves de sécurité | [seance-04](https://github.com/M2P-git/tp-framework-php/tree/seance-04) | [corrige-04](https://github.com/M2P-git/tp-framework-php/tree/corrige-04) |
+Lire [l'énoncé](ENONCE.md), [l'aide IDE](docs/ide-et-aide-locale.md),
+[la remise à zéro](docs/git-et-experimentation.md) et [les preuves de sécurité](docs/securite-client.md).
 
-Chaque branche contient un vrai squelette Laravel, un verrouillage Composer, des
-tests, un énoncé et un lancement Docker. La base suivante contient les acquis
-nécessaires ; le point de départ reste commun à la classe.
+## Installation avec Docker
 
-[Remise à zéro et expérimentation indépendante](docs/git-et-experimentation.md).
-[Navigation IDE](docs/ide-et-aide-locale.md).
-[Sécurité et modèle de preuves client](docs/securite-client.md).
+Docker Desktop lancé ; aucune installation PHP/Composer sur Windows nécessaire.
+Les dépendances sont dans un volume Linux pour éviter les lenteurs de vendor sur Windows.
 
-Suite Symfony : 5 consultation, 6 services, 7 Doctrine, 8 formulaires,
-9 droits, 10 transitions, 11 rapports, 12 extension et livraison.
-Ces instantanés seront publiés avant les séances correspondantes.
+```powershell
+docker compose run --rm composer install
+docker compose run --rm app php scripts/prepare.php
+docker compose run --rm app php artisan key:generate
+docker compose run --rm app php scripts/cache-ide.php
+docker compose run --rm app php artisan migrate:fresh --seed
+docker compose run --rm app php artisan test
+docker compose up app
+```
 
-Scénario fictif adapté d'une [mission Upwork de suivi d'atelier sous Notion](https://www.upwork.com/freelance-jobs/apply/Notion-Database-Systems-Specialist-Existing-Repair-Shop-CRM-Cleanup_~022090284885617756583/).
-Le prototype ne réalise pas la commande du client. Les tests du prototype
-ne constituent pas une certification de sécurité complète.
+Ouvrir http://127.0.0.1:8000. Les tests en échec sur une base sont attendus jusqu'à correction.
+`migrate:fresh --seed` efface et recrée UNIQUEMENT la BD SQLite locale de ce TP.
+Ne pas utiliser cette commande avec des données à conserver ou en production.
+Les séances 1 et 2 utilisent la liste en mémoire ; la BD de l'atelier commence à la séance 3.
 
-[Syllabus des douze séances](docs/syllabus.md).
-[Comparaison de dix missions](docs/comparaison-upwork.md).
-[Vérifications réalisées](docs/verification-professeur.md).
+## Installation PHP locale
+
+PHP >= 8.3 avec pdo_sqlite, mbstring, DOM et extensions requises par Composer.
+Exécuter `composer install`, copier `.env.example` en `.env`, ajuster `DB_DATABASE`
+au chemin ABSOLU de `database/database.sqlite` local, créer le fichier, puis
+`php artisan key:generate`, `php artisan migrate:fresh --seed`, `php artisan test`,
+`php artisan serve`. Les dépendances sont verrouillées avec platform.php=8.3.0.
+Aucun build Node n'est nécessaire : les vues du TP utilisent du CSS simple.
+
+## Périmètre
+
+Laravel 13 et PHPUnit, application de démonstration, données fictives, serveur de développement.
+Les comptes de la séance 4 sont annoncés sur la page login, jamais destinés à la production.
+Les tests CSRF se font sur le serveur local réel ; le mode Feature les contourne normalement.
