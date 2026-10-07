@@ -1,6 +1,6 @@
 # TP séance 1 : écrire le plus petit framework possible
 
-Dr Paul Mbilong, L3 Développement, ISMAGI. Durée : 50 minutes en classe, en binôme.
+Dr Paul Mbilong, L3 Développement, ISMAGI. Séance 1bis. Durée : 50 minutes en classe, en binôme.
 PHP 8.3 ou plus. Aucune bibliothèque, pas de Composer : uniquement PHP.
 
 ## Le but
@@ -98,11 +98,16 @@ et dans Symfony ?
 3. Cassez volontairement une chose (renommez `{id}` en `{identifiant}` dans `app/routes.php`) et lisez
    le message d'erreur en entier avant de corriger.
 
-## À faire avant la séance 2
+## Après ce TP : le projet Laravel, en classe
 
-- Terminer ce TP.
-- Récupérer le projet Laravel (branche `seance-01` du même dépôt) et le lancer (voir son `README.md`) :
-  `git clone --branch seance-01 https://github.com/M2P-git/tp-framework-php.git tp-laravel`
-  (ou le ZIP : <https://github.com/M2P-git/tp-framework-php/archive/refs/heads/seance-01.zip>).
-- Répondre aux six questions « retrouvez les pièces » de la présentation, compléter
-  `CatalogueInterventions::ouvertes()` et obtenir des tests verts.
+Ce TP est la première moitié de la séance 1bis. Après la pause, vous retrouvez les mêmes pièces dans un
+vrai framework : le projet Laravel est la branche `seance-01` du même dépôt (lire son `README.md`).
+
+```powershell
+git clone --branch seance-01 https://github.com/M2P-git/tp-framework-php.git tp-laravel
+```
+
+Ou le ZIP : <https://github.com/M2P-git/tp-framework-php/archive/refs/heads/seance-01.zip>.
+Il faut Git et Docker Desktop (ou PHP 8.3+ avec Composer) : à installer **avant** la séance.
+
+Avant la séance 2 : terminer ce qui ne l'est pas (`php tests/check.php` vert, `php artisan test` vert).
