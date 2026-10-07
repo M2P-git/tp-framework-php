@@ -12,6 +12,22 @@ dans Laravel et Symfony, à l'échelle d'une dizaine de petits fichiers.
 Le scénario est celui de l'Atelier Solidaire : l'accueil veut la liste des interventions **ouvertes**
 (A12 reçue, C19 en cours ; B07 est close), et le détail d'une intervention.
 
+## Récupérer le TP
+
+Le TP est la branche `seance-01-mini-framework` du dépôt de la classe.
+
+```powershell
+git clone --branch seance-01-mini-framework https://github.com/M2P-git/tp-framework-php.git tp-mini-framework
+cd tp-mini-framework
+```
+
+Sans Git : télécharger
+<https://github.com/M2P-git/tp-framework-php/archive/refs/heads/seance-01-mini-framework.zip>
+et extraire l'archive (ou, sur la page du dépôt : choisir la branche, puis *Code*, *Download ZIP*).
+
+C'est un **framework maison** en PHP pur, sans Composer : ni Laravel, ni Symfony. Environ 250 lignes en
+tout, dont 130 pour le framework lui-même (`src/`).
+
 ## Mise en route (7 minutes)
 
 ```powershell
@@ -85,6 +101,8 @@ et dans Symfony ?
 ## À faire avant la séance 2
 
 - Terminer ce TP.
-- Cloner le dépôt de la classe, ouvrir la branche `seance-01` (projet Laravel), le lancer (voir son
-  `README.md`), répondre aux six questions « retrouvez les pièces » de la présentation, compléter
+- Récupérer le projet Laravel (branche `seance-01` du même dépôt) et le lancer (voir son `README.md`) :
+  `git clone --branch seance-01 https://github.com/M2P-git/tp-framework-php.git tp-laravel`
+  (ou le ZIP : <https://github.com/M2P-git/tp-framework-php/archive/refs/heads/seance-01.zip>).
+- Répondre aux six questions « retrouvez les pièces » de la présentation, compléter
   `CatalogueInterventions::ouvertes()` et obtenir des tests verts.
