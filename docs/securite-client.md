@@ -5,7 +5,8 @@
 Les tests Feature Laravel désactivent normalement le contrôle CSRF. Leur
 succès ne démontre donc pas cette protection. Après initialisation du TP 04 :
 
-1. Lancer `docker compose up app`, ouvrir `/login`, afficher le champ `_token`.
+1. Dans la machine (`docker compose exec app bash`), lancer
+   `php artisan serve --host=0.0.0.0 --port=8000`, ouvrir `/login`, afficher le champ `_token`.
 2. Envoyer un POST `/login` sans jeton et sans en-tête d'origine de confiance :
    `curl.exe -i -X POST http://127.0.0.1:8000/login -d "email=tech@example.test&password=demo-cours"`.
 3. Attendre le refus CSRF (419 dans cette configuration), puis effectuer le

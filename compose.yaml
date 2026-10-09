@@ -1,19 +1,27 @@
+# compose.yaml est la FICHE DE DÉMARRAGE de la machine : quelle recette utiliser,
+# quels dossiers partager, quels ports ouvrir. Le Dockerfile décrit ce qu'il y a DANS la machine.
+#
+# Démarrer la machine :        docker compose up -d --build
+# Ouvrir un terminal dedans :  docker compose exec app bash
+# Éteindre la machine :        docker compose down
 services:
+  # « app » est le NOM du service : c'est lui qu'on écrit dans `docker compose exec app ...`
   app:
-    image: php:8.5-cli
-    working_dir: /app
+    build: .                 # construire l'image avec le Dockerfile de ce dossier
+    image: tp-laravel:8.5    # nom donné à l'image construite
+    working_dir: /app        # dossier où l'on arrive en ouvrant un terminal dans la machine
+    init: true               # arrête proprement la machine (docker compose down est rapide)
+    tty: true                # garde un terminal disponible pour `exec ... bash`
+    stdin_open: true
     volumes:
+      # le dépôt est partagé : ce que vous éditez dans VS Code est visible dans la machine
       - .:/app
+      # vendor/ (les paquets de Composer) vit dans un volume Docker, pas dans votre dossier Windows :
+      # il est installé une fois et reste rapide
       - vendor:/app/vendor
     ports:
+      # ORDINATEUR:MACHINE. Le serveur lancé dans la machine (port 8000) est joignable
+      # sur http://127.0.0.1:8000 ; seulement depuis votre ordinateur (127.0.0.1)
       - "127.0.0.1:8000:8000"
-    command: php artisan serve --host=0.0.0.0 --port=8000
-  composer:
-    image: composer:2
-    working_dir: /app
-    volumes:
-      - .:/app
-      - vendor:/app/vendor
-    profiles: [tools]
 volumes:
   vendor:

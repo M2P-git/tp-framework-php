@@ -24,8 +24,9 @@ git clean -nd
 git clean -fd
 git switch -C classe origin/seance-02
 git reset --hard origin/seance-02
-docker compose run --rm composer install
-docker compose run --rm app php artisan migrate:fresh --seed
+docker compose up -d --build
+docker compose exec app composer install
+docker compose exec app php artisan migrate:fresh --seed
 git status --short
 ```
 
