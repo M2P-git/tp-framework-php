@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // TODO (point 2) : apprendre au conteneur à construire CatalogueInterventions.
+        // Son constructeur demande un tableau : le conteneur ne peut pas le deviner.
+        // Donnez-lui une fonction qui crée le service avec config('atelier.interventions').
     }
 
     /**

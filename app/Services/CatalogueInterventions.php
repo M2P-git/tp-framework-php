@@ -1,26 +1,33 @@
 <?php
 declare(strict_types=1);
 namespace App\Services;
+
+/**
+ * Les règles de l'atelier sur les interventions. Le service ne sait pas d'où viennent
+ * les données : on les lui DONNE en le construisant (config, base de données, ou un test).
+ */
 final class CatalogueInterventions {
+    /** @param list<array{id: int, serie: string, description: string, statut: string}> $interventions */
+    public function __construct(private readonly array $interventions) {}
+
     public function toutes(): array {
-        return [
-            ['id'=>101,'serie'=>'A12','description'=>'Ecran noir','statut'=>'recu'],
-            ['id'=>102,'serie'=>'B07','description'=>'Batterie faible','statut'=>'clos'],
-            ['id'=>103,'serie'=>'C19','description'=>'Clavier bloque','statut'=>'en_cours'],
-        ];
+        return $this->interventions;
     }
+
     public function ouvertes(): array {
-        // TODO : conserver seulement les interventions ouvertes.
-        return $this->toutes();
+        return array_values(array_filter($this->interventions,
+            fn(array $i): bool => $i['statut'] !== 'clos'));
     }
+
     public function chercher(?string $mot): array {
-        $mot = strtolower(trim($mot ?? ''));
-        if ($mot === '') { return $this->ouvertes(); }
-        return array_values(array_filter($this->ouvertes(),
-            fn(array $i): bool => str_contains(strtolower($i['description']), $mot)));
+        // TODO (point 3) : retirer les espaces autour de $mot et ignorer la casse ;
+        // aucun mot (null ou blanc) => toutes les ouvertes ; sinon, les ouvertes dont
+        // la description contient le mot.
+        return $this->ouvertes();
     }
+
     public function trouver(int $id): ?array {
-        foreach ($this->toutes() as $i) { if ($i['id'] === $id) { return $i; } }
+        foreach ($this->interventions as $i) { if ($i['id'] === $id) { return $i; } }
         return null;
     }
 }

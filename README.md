@@ -1,4 +1,4 @@
-# Atelier Solidaire : Laravel, séance 01
+# Atelier Solidaire : Laravel, séance 02
 
 Dr Paul Mbilong, L3 Développement, ISMAGI. Compléter les TODO ; les tests doivent détecter les comportements manquants.
 
@@ -30,7 +30,7 @@ Prérequis : [Docker Desktop](https://www.docker.com/products/docker-desktop/) i
 Dans un terminal (PowerShell), **depuis la racine du dépôt** (le dossier qui contient `compose.yaml`) :
 
 ```bash
-git clone --branch seance-01 https://github.com/M2P-git/tp-framework-php.git tp-laravel
+git clone --branch seance-02 https://github.com/M2P-git/tp-framework-php.git tp-laravel
 cd tp-laravel
 
 docker compose up -d --build   # construit puis démarre « la machine » (1re fois : 1 à 3 min)
@@ -72,7 +72,7 @@ php scripts/prepare.php                       # crée .env et la base SQLite loc
 php artisan key:generate                      # génère la clé secrète de cette application
 php scripts/cache-ide.php                     # facultatif (3 min) : copie de vendor/ pour « aller à la définition » dans l'éditeur
 php artisan migrate:fresh --seed              # crée les tables et les données fictives
-php artisan test                              # 1 échec attendu (voir ENONCE.md), 2 réussis
+php artisan test                              # des échecs attendus : voir ENONCE.md, point 1
 php artisan serve --host=0.0.0.0 --port=8000  # démarre le serveur ; Ctrl+C l'arrête
 ```
 
