@@ -25,22 +25,38 @@ Prérequis : [Docker Desktop](https://www.docker.com/products/docker-desktop/) i
 | **Volume** | un dossier partagé entre votre ordinateur et la machine, ou un espace de stockage géré par Docker | votre dépôt est partagé ; `vendor/` a son propre volume |
 | **Port** | la porte par laquelle votre navigateur parle au serveur de la machine | `8000` |
 
-### 2. Démarrer la machine : les deux commandes à retenir
+### 2. Mettre le dépôt à la séance 3, puis démarrer la machine
 
-Dans un terminal (PowerShell), **depuis la racine du dépôt** (le dossier qui contient `compose.yaml`) :
+Ce dépôt sert **au TP seulement** ; les exercices du cours se font dans votre propre projet Laravel.
+Au début de chaque TP, on remet le dépôt à l'état de la séance : tout le monde a les mêmes fichiers et
+les mêmes données. **Les modifications faites dans ce dossier sont effacées** : recopiez d'abord dans votre
+projet ce que vous voulez garder.
+
+Dans un terminal (PowerShell), sur votre ordinateur :
 
 ```bash
-git clone --branch seance-03 https://github.com/M2P-git/tp-framework-php.git tp-laravel
-cd tp-laravel
+# première fois seulement, si vous n'avez pas encore le dépôt
+git clone https://github.com/M2P-git/tp-framework-php.git
+
+# à chaque séance : remettre le dépôt à l'état de la séance 3
+cd tp-framework-php
+git fetch origin
+git reset --hard                        # annule les modifications des fichiers du dépôt
+git clean -fd                           # supprime les fichiers ajoutés (sauf .env, vendor/ et la base)
+git switch -C classe origin/seance-03   # la branche « classe » prend le contenu de la séance 3
+git reset --hard origin/seance-03
 
 docker compose up -d --build   # construit puis démarre « la machine » (1re fois : 1 à 3 min)
 docker compose exec app bash   # ouvre un terminal DANS la machine
 ```
 
+`git clean -nd` montre, sans rien supprimer, ce que `git clean -fd` supprimerait.
+Si la machine d'une séance précédente tourne encore, arrêtez-la d'abord avec `docker compose down` (même port 8000).
+
 Le prompt change : vous êtes maintenant **dans la machine**.
 
 ```text
-PS C:\...\tp-laravel>      <- votre ordinateur (PowerShell)
+PS C:\...\tp-framework-php>   <- votre ordinateur (PowerShell)
 root@3f2a9c1b7d4e:/app#    <- la machine (Linux, dossier /app)
 ```
 
@@ -88,7 +104,8 @@ Ouvrir ensuite <http://127.0.0.1:8000/interventions> dans le navigateur de votre
 - Séance 3 : la base de l'atelier apparaît (tables `personnes`, `machines`, `interventions`, `pieces`,
   `intervention_piece`). **Au départ**, `migrate:fresh --seed` crée bien les tables, puis s'arrête dans
   `database/seeders/AtelierSeeder.php` sur `Call to undefined method App\Models\Machine::interventions()` :
-  c'est normal, c'est le point 1 de l'énoncé. Relancez la commande après le point 1, puis après le point 2.
+  c'est normal, c'est le point 1 de l'énoncé. En attendant, la page `/interventions` affiche « Aucune intervention
+  ouverte ». Relancez la commande après le point 1, puis après le point 2.
 - Les tests n'utilisent jamais `database/database.sqlite` : chacun reçoit une base neuve en mémoire
   (voir `tests/TestCase.php` et `phpunit.xml`).
 
@@ -156,7 +173,7 @@ dans un fichier lisible et suivi par Git, et `docker compose` les relit à chaqu
 ```text
  VOTRE ORDINATEUR (Windows)                     LA MACHINE (conteneur Linux, service « app »)
  ┌──────────────────────────────┐               ┌──────────────────────────────────────┐
- │ tp-laravel\ (VS Code)        │◄── partagé ──►│ /app          code, .env, SQLite     │
+ │ tp-framework-php\ (VS Code)  │◄── partagé ──►│ /app          code, .env, SQLite     │
  │                              │               │ /app/vendor   volume (Composer)      │
  │ navigateur                   │               │ php artisan serve (port 8000)        │
  │ http://127.0.0.1:8000        │◄─ port 8000 ─►│                                      │
@@ -178,7 +195,7 @@ dans un fichier lisible et suivi par Git, et `docker compose` les relit à chaqu
 | Message | Cause probable | Que faire |
 |:--|:--|:--|
 | `failed to connect to the docker API ... the daemon is running` | Docker Desktop n'est pas lancé | le démarrer, attendre « Engine running », relancer la commande |
-| `no configuration file provided: not found` | vous n'êtes pas dans le dossier du dépôt | `cd tp-laravel` (le dossier qui contient `compose.yaml`) |
+| `no configuration file provided: not found` | vous n'êtes pas dans le dossier du dépôt | `cd tp-framework-php` (le dossier qui contient `compose.yaml`) |
 | `service "app" is not running` | la machine est éteinte | `docker compose up -d` |
 | `Bind for 127.0.0.1:8000 failed: port is already allocated` | le port 8000 est pris (autre serveur, ou machine d'un autre dossier du cours) | `Ctrl+C` dans l'autre serveur, ou `docker compose down` dans l'autre dossier |
 | `Failed opening required '/app/vendor/autoload.php'` | `composer install` pas fait (ou `vendor` supprimé par `down -v`) | `composer install` dans la machine |

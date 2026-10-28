@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Intervention;
 use App\Services\CatalogueInterventions;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,11 +13,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // TODO (point 3) : la liaison de la séance 2 lit encore config/atelier.php.
-        // Donnez au service les interventions de la base, sous la même forme
-        // (des tableaux avec id, serie, description, statut), en chargeant les machines avec with().
+        // Cette fonction indique à Laravel comment construire le service CatalogueInterventions,
+        // qui fournit les interventions au contrôleur : elle les lit dans la base, sous forme de tableaux.
+        // TODO (point 3) : pour afficher la série, $i->machine déclenche une requête par intervention.
+        // Chargez les machines avec les interventions : remplacez Intervention::all() par with('machine')->get().
         $this->app->singleton(CatalogueInterventions::class, fn () => new CatalogueInterventions(
-            config('atelier.interventions'),
+            Intervention::all()->map(fn (Intervention $i) => [
+                'id' => $i->id,
+                'serie' => $i->machine->serie,
+                'description' => $i->description,
+                'statut' => $i->statut,
+            ])->all(),
         ));
     }
 
