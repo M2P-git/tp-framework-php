@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\CatalogueInterventions;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,9 +12,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // TODO (point 2) : apprendre au conteneur à construire CatalogueInterventions.
-        // Son constructeur demande un tableau : le conteneur ne peut pas le deviner.
-        // Donnez-lui une fonction qui crée le service avec config('atelier.interventions').
+        // TODO (point 3) : la liaison de la séance 2 lit encore config/atelier.php.
+        // Donnez au service les interventions de la base, sous la même forme
+        // (des tableaux avec id, serie, description, statut), en chargeant les machines avec with().
+        $this->app->singleton(CatalogueInterventions::class, fn () => new CatalogueInterventions(
+            config('atelier.interventions'),
+        ));
     }
 
     /**

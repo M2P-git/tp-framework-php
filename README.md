@@ -1,4 +1,4 @@
-# Atelier Solidaire : Laravel, séance 02
+# Atelier Solidaire : Laravel, séance 03
 
 Dr Paul Mbilong, L3 Développement, ISMAGI. Compléter les TODO ; les tests doivent détecter les comportements manquants.
 
@@ -30,7 +30,7 @@ Prérequis : [Docker Desktop](https://www.docker.com/products/docker-desktop/) i
 Dans un terminal (PowerShell), **depuis la racine du dépôt** (le dossier qui contient `compose.yaml`) :
 
 ```bash
-git clone --branch seance-02 https://github.com/M2P-git/tp-framework-php.git tp-laravel
+git clone --branch seance-03 https://github.com/M2P-git/tp-framework-php.git tp-laravel
 cd tp-laravel
 
 docker compose up -d --build   # construit puis démarre « la machine » (1re fois : 1 à 3 min)
@@ -71,7 +71,7 @@ composer install                              # télécharge Laravel et ses paqu
 php scripts/prepare.php                       # crée .env et la base SQLite locale
 php artisan key:generate                      # génère la clé secrète de cette application
 php scripts/cache-ide.php                     # facultatif (3 min) : copie de vendor/ pour « aller à la définition » dans l'éditeur
-php artisan migrate:fresh --seed              # crée les tables et les données fictives
+php artisan migrate:fresh --seed              # crée les tables et les données fictives (au départ : erreur attendue, voir plus bas)
 php artisan test                              # des échecs attendus : voir ENONCE.md, point 1
 php artisan serve --host=0.0.0.0 --port=8000  # démarre le serveur ; Ctrl+C l'arrête
 ```
@@ -85,7 +85,12 @@ Ouvrir ensuite <http://127.0.0.1:8000/interventions> dans le navigateur de votre
 - Les tests en échec sur une base sont attendus jusqu'à correction.
   `migrate:fresh --seed` efface et recrée UNIQUEMENT la BD SQLite locale de ce TP.
   Ne pas utiliser cette commande avec des données à conserver ou en production.
-  Les séances 1 et 2 utilisent la liste en mémoire ; la BD de l'atelier commence à la séance 3.
+- Séance 3 : la base de l'atelier apparaît (tables `personnes`, `machines`, `interventions`, `pieces`,
+  `intervention_piece`). **Au départ**, `migrate:fresh --seed` crée bien les tables, puis s'arrête dans
+  `database/seeders/AtelierSeeder.php` sur `Call to undefined method App\Models\Machine::interventions()` :
+  c'est normal, c'est le point 1 de l'énoncé. Relancez la commande après le point 1, puis après le point 2.
+- Les tests n'utilisent jamais `database/database.sqlite` : chacun reçoit une base neuve en mémoire
+  (voir `tests/TestCase.php` et `phpunit.xml`).
 
 ### 4. Les commandes Docker du cours (aide-mémoire)
 

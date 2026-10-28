@@ -20,10 +20,10 @@ final class CatalogueInterventions {
     }
 
     public function chercher(?string $mot): array {
-        // TODO (point 3) : retirer les espaces autour de $mot et ignorer la casse ;
-        // aucun mot (null ou blanc) => toutes les ouvertes ; sinon, les ouvertes dont
-        // la description contient le mot.
-        return $this->ouvertes();
+        $mot = mb_strtolower(trim($mot ?? ''));
+        if ($mot === '') { return $this->ouvertes(); }
+        return array_values(array_filter($this->ouvertes(),
+            fn(array $i): bool => str_contains(mb_strtolower($i['description']), $mot)));
     }
 
     public function trouver(int $id): ?array {

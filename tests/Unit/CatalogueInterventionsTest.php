@@ -32,6 +32,8 @@ class CatalogueInterventionsTest extends TestCase {
         $this->assertSame([], $this->catalogue()->chercher('imprimante'));
     }
 
-    // TODO (point 4) : écrivez test_un_dossier_clos_ne_revient_jamais.
-    // Cherchez un mot qui n'apparaît QUE dans une intervention close.
+    public function test_un_dossier_clos_ne_revient_jamais(): void {
+        // « noir » n'apparaît que dans T02, qui est close
+        $this->assertSame([], $this->catalogue()->chercher('noir'));
+    }
 }
