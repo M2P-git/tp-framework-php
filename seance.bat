@@ -13,15 +13,20 @@ rem  n'est pas touche. Gardez ailleurs ce que vous voulez conserver d'un TP.
 rem  Les fichiers ignores par Git (.env, vendor, base SQLite) restent ; la base est recreee.
 rem ============================================================================================
 setlocal EnableExtensions
-chcp 65001 >nul
 
-rem Git va remplacer ce fichier pendant qu'il s'execute, et l'invite de commandes lit un .bat au fur
-rem et a mesure : le script se recopie donc dans %TEMP%, puis continue depuis cette copie.
+rem Git va remplacer ce fichier pendant qu'il s'execute, et l'invite de commandes lit un .bat au fur et a mesure :
+rem le script se recopie donc dans %TEMP%, puis continue depuis cette copie. La copie recoit toujours des fins de
+rem ligne Windows (CRLF), meme si Git a ecrit ce fichier avec des fins de ligne LF (depot clone avant l'arrivee du
+rem script) : avec LF, des accents et chcp 65001, l'invite de commandes decoupe mal les lignes.
+rem Jusqu'a ce bloc compris : ni accent, ni etiquette, ni changement de page de code.
 if /i not "%~1"=="--copie" (
-  copy /y "%~f0" "%TEMP%\seance-cours.bat" >nul
+  set "SEANCE_SOURCE=%~f0"
+  set "SEANCE_COPIE=%TEMP%\seance-cours.bat"
+  powershell -NoProfile -ExecutionPolicy Bypass -Command "$t = [IO.File]::ReadAllText($env:SEANCE_SOURCE) -replace '\r?\n', ([char]13 + [char]10); [IO.File]::WriteAllText($env:SEANCE_COPIE, $t, (New-Object Text.UTF8Encoding $false))" >nul 2>&1 || copy /y "%~f0" "%TEMP%\seance-cours.bat" >nul
   "%TEMP%\seance-cours.bat" --copie %*
 )
 shift
+chcp 65001 >nul
 
 rem ---------------------------------------------------------------- la seance demandee
 set "SEANCE=%~1"
