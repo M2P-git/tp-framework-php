@@ -32,6 +32,24 @@ Au début de chaque TP, on remet le dépôt à l'état de la séance : tout le m
 les mêmes données. **Les modifications faites dans ce dossier sont effacées** : recopiez d'abord dans votre
 projet ce que vous voulez garder.
 
+**Le plus simple : le script de séance.** Il fait tout ce qui suit : Git, puis la machine Docker, les paquets,
+la base de données et le serveur. Dans le dossier `tp-framework-php`, sur votre ordinateur :
+
+| Votre ordinateur | Commande |
+|:--|:--|
+| Windows (PowerShell, ou le terminal de VS Code) | `.\seance.bat 03` |
+| macOS et Linux (Terminal) | `./seance.sh 03` |
+
+Le script demande confirmation, efface vos modifications dans ce dossier, puis prépare la machine ; le site est
+ensuite sur <http://127.0.0.1:8000>. Si votre dépôt date d'avant le script (le fichier n'existe pas encore) :
+
+```bash
+git fetch origin
+git checkout origin/seance-03 -- seance.bat seance.sh
+```
+
+Les commandes ci-dessous font la même chose, à la main.
+
 Dans un terminal (PowerShell), sur votre ordinateur :
 
 ```bash
