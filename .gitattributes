@@ -9,3 +9,7 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# scripts de séance : CRLF pour Windows, LF pour macOS et Linux
+*.bat text eol=crlf
+*.sh text eol=lf
