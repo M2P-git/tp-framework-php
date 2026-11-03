@@ -13,6 +13,23 @@ Suivre ensuite le README de la branche pour Composer, la configuration et Docker
 
 ## Nouvelle séance
 
+Le script de séance fait tout, dans le dossier du dépôt (remplacer 03 par la séance annoncée) :
+
+```powershell
+.\seance.bat 03        # Windows (PowerShell, ou le terminal de VS Code)
+```
+
+```bash
+./seance.sh 03         # macOS et Linux ; ou : bash seance.sh 03
+```
+
+Il demande confirmation (sauf avec `/oui` ou `--oui`), efface les modifications de ce dossier, met la branche
+`classe` sur `origin/seance-03`, démarre la machine Docker, installe les paquets, recrée la base de la séance et
+lance le serveur sur le port 8000. Il refuse de travailler dans un autre dépôt que celui du cours. Sous Linux, il
+rend aussi à votre compte les fichiers que la machine a créés au nom de root.
+
+Sans le script, les mêmes étapes, à la main :
+
 Sauvegarder dans un autre dossier ou une branche personnelle ce que vous souhaitez
 garder avant la remise à zéro. Les commandes suivantes effacent le travail local
 de classe ; remplacer 02 par la séance annoncée.
