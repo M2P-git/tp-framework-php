@@ -10,6 +10,6 @@
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
 
-# scripts de séance : CRLF pour Windows, LF pour macOS et Linux
-*.bat text eol=crlf
+# scripts de séance : le .bat est gardé tel quel, en CRLF (Windows) ; le .sh en LF (macOS, Linux)
+*.bat -text
 *.sh text eol=lf
