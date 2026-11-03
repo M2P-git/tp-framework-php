@@ -29,3 +29,15 @@ contrôle en échec ; il passe au vert au fur et à mesure.
 | `app/` | données, routes, contrôleur (à compléter) |
 | `templates/` | gabarits HTML (fournis) |
 | `tests/check.php` | vérificateur : `php tests/check.php` |
+
+## Changer de séance
+
+Le dépôt contient une branche par séance. Pour passer à une autre séance, dans le dossier du dépôt :
+
+| Votre ordinateur | Commande |
+|:--|:--|
+| Windows (PowerShell, ou le terminal de VS Code) | `.\seance.bat 03` |
+| macOS et Linux (Terminal) | `./seance.sh 03` |
+
+Le script demande confirmation, puis **efface vos modifications dans ce dossier** et le met à l'état de la séance.
+Pour les séances Laravel, il prépare aussi la machine Docker (voir le README de la séance).
