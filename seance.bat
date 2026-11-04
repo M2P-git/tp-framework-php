@@ -96,6 +96,13 @@ docker compose up -d --build || (
 )
 echo Installation des paquets ^(composer install^)...
 docker compose exec -T app composer install --no-interaction --no-progress || goto :erreur
+rem Copie de lecture de vendor\ pour l'editeur (Intelephense, dans VS Code) : sans elle, VS Code souligne en rouge
+rem Model, BelongsTo, Fillable... (« Undefined type »), car vendor\ vit dans un volume Docker qu'il ne voit pas.
+rem En arriere-plan, et seulement si composer.lock a change depuis la derniere copie (environ 3 minutes).
+if exist "scripts\cache-ide.php" (
+  echo Copie de vendor pour VS Code, en arriere-plan ^(.ide-vendor, environ 3 minutes la premiere fois^).
+  docker compose exec -d app sh -c "cmp -s composer.lock .ide-vendor/composer.lock || { php scripts/cache-ide.php && cp composer.lock .ide-vendor/composer.lock; }"
+)
 docker compose exec -T app php scripts/prepare.php
 docker compose exec -T app php artisan key:generate
 echo Base de données de la séance ^(migrate:fresh --seed^)...
