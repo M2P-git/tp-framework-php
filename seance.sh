@@ -142,6 +142,14 @@ principal() {
   "${COMPOSE[@]}" up -d --build || arret "si le port 8000 est déjà pris, une autre machine du cours tourne encore : arrêtez-la avec docker compose down, dans son dossier, puis relancez."
   echo "Installation des paquets (composer install)..."
   "${COMPOSE[@]}" exec -T app composer install --no-interaction --no-progress || arret "composer install a échoué."
+  # Copie de lecture de vendor/ pour l'éditeur (Intelephense, dans VS Code) : sans elle, VS Code souligne en rouge
+  # Model, BelongsTo, Fillable... (« Undefined type »), car vendor/ vit dans un volume Docker qu'il ne voit pas.
+  # En arrière-plan, et seulement si composer.lock a changé depuis la dernière copie (quelques minutes).
+  if [ -f scripts/cache-ide.php ]; then
+    echo "Copie de vendor pour VS Code, en arrière-plan (.ide-vendor, quelques minutes la première fois)."
+    "${COMPOSE[@]}" exec -d app sh -c \
+      'cmp -s composer.lock .ide-vendor/composer.lock || { php scripts/cache-ide.php && cp composer.lock .ide-vendor/composer.lock; }'
+  fi
   "${COMPOSE[@]}" exec -T app php scripts/prepare.php
   "${COMPOSE[@]}" exec -T app php artisan key:generate
   echo "Base de données de la séance (migrate:fresh --seed)..."
