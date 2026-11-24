@@ -208,14 +208,46 @@ dans un fichier lisible et suivi par Git, et `docker compose` les relit à chaqu
 - Après un redémarrage de l'ordinateur ou de Docker Desktop, la machine est éteinte :
   `docker compose up -d`.
 
-### 9. Si quelque chose ne va pas
+### 9. Le serveur : le voir, l'arrêter, le relancer
+
+Le script de séance lance le serveur **en arrière-plan, dans la machine** : il n'apparaît dans aucune fenêtre. Il
+compte deux programmes : `php artisan serve`, et `php -S`, qu'il démarre et qui répond au navigateur.
+
+Sur votre ordinateur, dans le dossier `tp-framework-php` :
+
+| Je veux… | Commande |
+|:--|:--|
+| savoir s'il tourne | `docker compose exec app pgrep -af serve` (deux lignes : il tourne ; aucune : il est arrêté) |
+| l'arrêter | `docker compose exec app pkill -f serve` |
+| le relancer | `docker compose exec -d app php artisan serve --host=0.0.0.0 --port=8000` |
+| tout remettre en route | `docker compose restart`, puis le relancer |
+
+```text
+> docker compose exec app pgrep -af serve
+128 php artisan serve --host=0.0.0.0 --port=8000
+136 /usr/local/bin/php -S 0.0.0.0:8000 /app/vendor/laravel/framework/src/Illuminate/Foundation/Console/../resources/server.php
+> docker compose exec app pkill -f serve
+> docker compose exec app pgrep -af serve
+                          (aucune ligne : le serveur est arrêté)
+```
+
+- Dans la machine (invite `root@...:/app#`), les mêmes commandes s'écrivent sans `docker compose exec app` :
+  `pgrep -af serve`, `pkill -f serve`, ou `php artisan serve --host=0.0.0.0 --port=8000`, que `Ctrl+C` arrête.
+- `pkill -f serve` arrête les deux programmes. Avec `pkill -f "artisan serve"`, `php -S` continuerait de répondre.
+- Pour un serveur arrêté, **ne relancez pas le script de séance** : il effacerait vos modifications.
+
+### 10. Si quelque chose ne va pas
 
 | Message | Cause probable | Que faire |
 |:--|:--|:--|
+| navigateur : « Ce site est inaccessible. 127.0.0.1 n'autorise pas la connexion. » | la machine est éteinte | `docker compose up -d`, puis relancer le serveur (section 9) |
+| navigateur : « Cette page ne fonctionne pas. 127.0.0.1 n'a envoyé aucune donnée. » | la machine tourne, le serveur est arrêté | relancer le serveur (section 9) |
+| `Failed to listen on 0.0.0.0:8000 (reason: Address already in use)` | un serveur tourne déjà dans la machine | rien : ouvrir la page ; pour repartir de zéro, l'arrêter puis le relancer (section 9) |
+| `Server running on [http://0.0.0.0:8001]` | `--port=8000` oublié alors qu'un serveur tourne déjà : le navigateur n'atteint pas le port 8001 | `Ctrl+C`, puis la commande complète |
 | `failed to connect to the docker API ... the daemon is running` | Docker Desktop n'est pas lancé | le démarrer, attendre « Engine running », relancer la commande |
 | `no configuration file provided: not found` | vous n'êtes pas dans le dossier du dépôt | `cd tp-framework-php` (le dossier qui contient `compose.yaml`) |
 | `service "app" is not running` | la machine est éteinte | `docker compose up -d` |
-| `Bind for 127.0.0.1:8000 failed: port is already allocated` | le port 8000 est pris (autre serveur, ou machine d'un autre dossier du cours) | `Ctrl+C` dans l'autre serveur, ou `docker compose down` dans l'autre dossier |
+| `Bind for 127.0.0.1:8000 failed: port is already allocated` | le port 8000 est pris (autre serveur, ou machine d'un autre dossier du cours) | `docker ps --filter "publish=8000"` nomme la machine qui le tient : `docker compose down` dans son dossier ; sinon, `Ctrl+C` dans la fenêtre de l'autre serveur (`netstat -ano \| findstr :8000` donne le numéro du programme) |
 | `Failed opening required '/app/vendor/autoload.php'` | `composer install` pas fait (ou `vendor` supprimé par `down -v`) | `composer install` dans la machine |
 | `No application encryption key has been specified` | `key:generate` oublié | `php artisan key:generate` dans la machine |
 | `php: command not found` | vous tapez dans PowerShell, pas dans la machine | `docker compose exec app bash` |
