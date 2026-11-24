@@ -26,10 +26,10 @@ class AtelierSeeder extends Seeder
             ->pieces()->attach($ssd);
         $a12->interventions()->create(['description' => 'Ecran noir', 'statut' => 'recu'])
             ->pieces()->attach([$ecran->id, $nappe->id]);
-
-        // TODO (point 2) : sur le même modèle, créez dans cet ordre :
-        //   - pour C19 : « Disque plein », close, avec la pièce $ssd ;
-        //   - pour B07 : « Batterie faible », close, avec la pièce $batterie ;
-        //   - pour C19 : « Clavier bloque », en cours (statut 'en_cours'), sans pièce.
+        $c19->interventions()->create(['description' => 'Disque plein', 'statut' => 'clos'])
+            ->pieces()->attach($ssd);
+        $b07->interventions()->create(['description' => 'Batterie faible', 'statut' => 'clos'])
+            ->pieces()->attach($batterie);
+        $c19->interventions()->create(['description' => 'Clavier bloque', 'statut' => 'en_cours']);
     }
 }

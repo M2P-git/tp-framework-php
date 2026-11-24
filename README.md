@@ -1,6 +1,6 @@
-# Atelier Solidaire : Laravel, séance 03
+# Atelier Solidaire : Laravel, séance 04
 
-Dr Paul Mbilong, L3 Développement, ISMAGI. Compléter les TODO ; les tests doivent détecter les comportements manquants.
+Dr Paul Mbilong, L3 Développement, ISMAGI. Suivre les démonstrations et les exercices des diapositives ; les tests vérifient chaque étape.
 
 Lire [l'énoncé](ENONCE.md), [l'aide IDE](docs/ide-et-aide-locale.md),
 [la remise à zéro](docs/git-et-experimentation.md) et [les preuves de sécurité](docs/securite-client.md).
@@ -25,9 +25,9 @@ Prérequis : [Docker Desktop](https://www.docker.com/products/docker-desktop/) i
 | **Volume** | un dossier partagé entre votre ordinateur et la machine, ou un espace de stockage géré par Docker | votre dépôt est partagé ; `vendor/` a son propre volume |
 | **Port** | la porte par laquelle votre navigateur parle au serveur de la machine | `8000` |
 
-### 2. Mettre le dépôt à la séance 3, puis démarrer la machine
+### 2. Mettre le dépôt à la séance 4, puis démarrer la machine
 
-Ce dépôt sert **au TP seulement** ; les exercices du cours se font dans votre propre projet Laravel.
+À la séance 4, **toute la séance** se fait dans ce dépôt, sur les modèles de l'atelier : les démonstrations et les deux exercices.
 Au début de chaque TP, on remet le dépôt à l'état de la séance : tout le monde a les mêmes fichiers et
 les mêmes données. **Les modifications faites dans ce dossier sont effacées** : recopiez d'abord dans votre
 projet ce que vous voulez garder.
@@ -37,15 +37,15 @@ la base de données et le serveur. Dans le dossier `tp-framework-php`, sur votre
 
 | Votre ordinateur | Commande |
 |:--|:--|
-| Windows (PowerShell, ou le terminal de VS Code) | `.\seance.bat 03` |
-| macOS et Linux (Terminal) | `./seance.sh 03` |
+| Windows (PowerShell, ou le terminal de VS Code) | `.\seance.bat 04` |
+| macOS et Linux (Terminal) | `./seance.sh 04` |
 
 Le script demande confirmation, efface vos modifications dans ce dossier, puis prépare la machine ; le site est
 ensuite sur <http://127.0.0.1:8000>. Si votre dépôt date d'avant le script (le fichier n'existe pas encore) :
 
 ```bash
 git fetch origin
-git checkout origin/seance-03 -- seance.bat seance.sh
+git checkout origin/seance-04 -- seance.bat seance.sh
 ```
 
 Les commandes ci-dessous font la même chose, à la main.
@@ -56,13 +56,13 @@ Dans un terminal (PowerShell), sur votre ordinateur :
 # première fois seulement, si vous n'avez pas encore le dépôt
 git clone https://github.com/M2P-git/tp-framework-php.git
 
-# à chaque séance : remettre le dépôt à l'état de la séance 3
+# à chaque séance : remettre le dépôt à l'état de la séance 4
 cd tp-framework-php
 git fetch origin
 git reset --hard                        # annule les modifications des fichiers du dépôt
 git clean -fd                           # supprime les fichiers ajoutés (sauf .env, vendor/ et la base)
-git switch -C classe origin/seance-03   # la branche « classe » prend le contenu de la séance 3
-git reset --hard origin/seance-03
+git switch -C classe origin/seance-04   # la branche « classe » prend le contenu de la séance 4
+git reset --hard origin/seance-04
 
 docker compose up -d --build   # construit puis démarre « la machine » (1re fois : 1 à 3 min)
 docker compose exec app bash   # ouvre un terminal DANS la machine
@@ -119,11 +119,11 @@ Ouvrir ensuite <http://127.0.0.1:8000/interventions> dans le navigateur de votre
 - Les tests en échec sur une base sont attendus jusqu'à correction.
   `migrate:fresh --seed` efface et recrée UNIQUEMENT la BD SQLite locale de ce TP.
   Ne pas utiliser cette commande avec des données à conserver ou en production.
-- Séance 3 : la base de l'atelier apparaît (tables `personnes`, `machines`, `interventions`, `pieces`,
-  `intervention_piece`). **Au départ**, `migrate:fresh --seed` crée bien les tables, puis s'arrête dans
-  `database/seeders/AtelierSeeder.php` sur `Call to undefined method App\Models\Machine::interventions()` :
-  c'est normal, c'est le point 1 de l'énoncé. En attendant, la page `/interventions` affiche « Aucune intervention
-  ouverte ». Relancez la commande après le point 1, puis après le point 2.
+- Séance 4 : la base contient l'atelier de la séance 3 (Nadia, Karim, A12, C19, B07). **Au départ**,
+  `php artisan test` donne 1 échec, `FactoryTest` : c'est la première démonstration de la séance (les factories).
+  Les tests des deux exercices se lancent par leur chemin : `php artisan test tests/Exercices/Exercice1Test.php`
+  et `php artisan test tests/Exercices/ExerciceFinalTest.php`. Connexion : `test@example.com`, mot de passe
+  `password`.
 - Les tests n'utilisent jamais `database/database.sqlite` : chacun reçoit une base neuve en mémoire
   (voir `tests/TestCase.php` et `phpunit.xml`).
 

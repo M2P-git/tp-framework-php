@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 #[Fillable(['description', 'statut'])]
 class Intervention extends Model
 {
-    // TODO (point 1) : une intervention concerne une seule machine (plusieurs à un).
-    // Écrivez la méthode machine(), sur le modèle de Machine::personne().
+    public function machine(): BelongsTo
+    {
+        return $this->belongsTo(Machine::class);
+    }
 
     public function pieces(): BelongsToMany
     {

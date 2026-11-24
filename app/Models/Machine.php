@@ -15,6 +15,8 @@ class Machine extends Model
         return $this->belongsTo(Personne::class);
     }
 
-    // TODO (point 1) : une machine a plusieurs interventions (un à plusieurs).
-    // Écrivez la méthode interventions(), sur le modèle de Personne::machines().
+    public function interventions(): HasMany
+    {
+        return $this->hasMany(Intervention::class);
+    }
 }
